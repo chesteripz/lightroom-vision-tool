@@ -30,22 +30,25 @@ func process(urlString: String) -> [String: Float]{
 
 func main(){
     print("Core ML Vision Classifier")
+    if (CommandLine.arguments.count < 3){
+        print("Usage:\n vision-tool output_file input_file_1 input_file_2 ...")
+        return
+    }
 
     print("Input: \(CommandLine.arguments.count - 2) file(s)")
-    var argCount = 0;
+
     var results = [String: [String: Float]]();
     var path: String = "results.json";
 
-    for argument in CommandLine.arguments {
-        if (argCount > 1){
+    for (index, argument) in CommandLine.arguments.enumerated() {
+        if (index > 1){
             let result = process(urlString: argument)
             if (result.count > 0){
                 results[argument] = result
             }
-        } else if (argCount == 1){
+        } else if (index == 1){
             path = argument
         }
-        argCount += 1
     }
     do {
         let jsonData = try JSONSerialization.data(withJSONObject: results, options: .prettyPrinted)
