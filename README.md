@@ -8,7 +8,7 @@ Since it's based on Core ML, the Neural Engine can be utilized automatically res
 + macOS 10.15+
 
 ## Install
-Open terminal, and run curl -fsSL https://lrimageclassifier.chesterip.cc/bin/install.sh | bash
+<!-- Open terminal, and run curl -fsSL https://lrimageclassifier.chesterip.cc/bin/install.sh | bash -->
 
 ## Performance
 It takes about 30 sec to process 800 images on 14" MacBook Pro with M1 Pro and Neural Engine.
