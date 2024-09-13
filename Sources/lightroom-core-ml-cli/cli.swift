@@ -4,7 +4,7 @@ import Foundation
 import SQLite3
 import Vision
 
-func process(urlString: String) -> [String: Float] {
+func classify(urlString: String) -> [String: Float] {
   let url = URL(fileURLWithPath: urlString)
 
   // Classify the images
@@ -24,8 +24,31 @@ func process(urlString: String) -> [String: Float] {
   return categories
 }
 
+func process_ocr(urlString: String) -> [String] {
+  let url = URL(fileURLWithPath: urlString)
+
+  // Classify the images
+  let request = VNRecognizeTextRequest()
+  let handler = VNImageRequestHandler(url: url, options: [:])
+  try? handler.perform([request])
+
+  guard
+    let observations = request.results
+  else {
+    return []
+  }
+  let recognizedStrings = observations.compactMap { observation in
+    // Return the string of the top VNRecognizedText instance.
+    return observation.topCandidates(1).first?.string
+  }
+  return recognizedStrings
+}
+
 @main
 struct TagPhoto: ParsableCommand {
+  @Flag
+  var ocr: Bool = false
+
   @Argument(help: "Output path.")
   var output: String
 
@@ -36,13 +59,20 @@ struct TagPhoto: ParsableCommand {
     print("Core ML Vision Image Classifier")
     print("Input: \(paths.count) file(s)")
 
-    var results = [String: [String: Float]]()
+    var results = [String: Any]()
 
     for (index, argument) in paths.enumerated() {
       print("[\(index + 1)/\(paths.count)] \(argument)")
-      let result = process(urlString: argument)
-      if result.count > 0 {
-        results[argument] = result
+      if ocr {
+        let result = process_ocr(urlString: argument)
+        if result.count > 0 {
+          results[argument] = result
+        }
+      } else {
+        let result = classify(urlString: argument)
+        if result.count > 0 {
+          results[argument] = result
+        }
       }
     }
     do {

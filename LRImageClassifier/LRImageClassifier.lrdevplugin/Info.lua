@@ -18,6 +18,7 @@ return {
         file = "TagImages.lua"
     },
 
-    LrPluginInfoProvider = 'PluginInfoProvider.lua'
+    LrPluginInfoProvider = 'PluginInfoProvider.lua',
+	LrMetadataProvider = 'PluginMetadataProvider.lua',
 }
 

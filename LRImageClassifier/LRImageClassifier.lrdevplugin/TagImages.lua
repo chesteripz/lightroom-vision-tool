@@ -28,7 +28,7 @@ local function startProcessing(photos)
 
     local cmd
     local tempfile = prefs.tempfile
-    local threshold = prefs.threshold
+    local threshold = prefs.threshold + 0.0
     local catalog = LrApplication.activeCatalog()
     cmd = '"' .. prefs.visionToolPath .. '" "' .. tempfile .. '" ' .. getImageList(photos)
     -- cmd = 'open -a ' .. '"' .. prefs.PureRawPath .. '"' .. ' ' .. getImageList(images)
